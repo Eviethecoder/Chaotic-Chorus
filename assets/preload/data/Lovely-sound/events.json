@@ -2,7 +2,17 @@
 	"song": {
 		"events": [
 			[
-				124650,
+				46950,
+				[
+					[
+						"newlyrics",
+						"3",
+						"what a Lovely Sound"
+					]
+				]
+			],
+			[
+				124800,
 				[
 					[
 						"coolcolormodeon",
@@ -12,12 +22,62 @@
 				]
 			],
 			[
-				143850,
+				144000,
 				[
 					[
 						"coolcolormodeoff",
 						"",
 						""
+					]
+				]
+			],
+			[
+				180000,
+				[
+					[
+						"newlyrics",
+						"3",
+						"Let go"
+					]
+				]
+			],
+			[
+				181350,
+				[
+					[
+						"newlyrics",
+						"3",
+						"Let"
+					]
+				]
+			],
+			[
+				181650,
+				[
+					[
+						"newlyrics",
+						"3",
+						" Let The"
+					]
+				]
+			],
+			[
+				181800,
+				[
+					[
+						"newlyrics",
+						"3",
+						" Let The Past"
+					]
+				]
+			],
+			[
+				182100,
+				[
+					[
+						"newlyrics",
+						"3",
+						" Let The Past Die"
 					]
 				]
 			]
