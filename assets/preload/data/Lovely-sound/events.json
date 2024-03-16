@@ -1,0 +1,26 @@
+{
+	"song": {
+		"events": [
+			[
+				124650,
+				[
+					[
+						"coolcolormodeon",
+						"",
+						""
+					]
+				]
+			],
+			[
+				143850,
+				[
+					[
+						"coolcolormodeoff",
+						"",
+						""
+					]
+				]
+			]
+		]
+	}
+}

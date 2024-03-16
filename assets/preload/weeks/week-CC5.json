@@ -1,0 +1,32 @@
+{
+	"storyName": "hide 'n' seek",
+	"difficulties": "",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"songs": [
+		[
+			"Cant-hide-from-fun",
+			"lifeless",
+			[
+				255,
+				33,
+				253
+			]
+		]
+	],
+	"hideStoryMode": false,
+	"weekName": "Lifeless Week",
+	"hiddenUntilUnlocked": false
+}
