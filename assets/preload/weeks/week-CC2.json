@@ -1,0 +1,32 @@
+{
+	"storyName": "need... more...",
+	"difficulties": "",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"songs": [
+		[
+			"Patched-out",
+			"patchnote",
+			[
+				75,
+				0,
+				255
+			]
+		]
+	],
+	"hideStoryMode": false,
+	"weekName": "Patchnote Week",
+	"hiddenUntilUnlocked": false
+}
