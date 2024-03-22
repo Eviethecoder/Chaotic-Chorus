@@ -19,8 +19,10 @@ typedef StageFile = {
 	var isPixelStage:Bool;
 
 	var boyfriend:Array<Dynamic>;
+	var boyfriend2:Array<Dynamic>;
 	var girlfriend:Array<Dynamic>;
 	var opponent:Array<Dynamic>;
+	var opponent2:Array<Dynamic>;
 	var hide_girlfriend:Bool;
 
 	var camera_boyfriend:Array<Float>;

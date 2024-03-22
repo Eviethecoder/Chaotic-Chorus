@@ -135,6 +135,10 @@ class PlayState extends MusicBeatState
 	public var BF_Y:Float = 100;
 	public var DAD_X:Float = 100;
 	public var DAD_Y:Float = 100;
+	public var BF2_X:Float = 770;
+	public var BF2_Y:Float = 100;
+	public var DAD2_X:Float = 100;
+	public var DAD2_Y:Float = 100;
 	public var GF_X:Float = 400;
 	public var GF_Y:Float = 130;
 
@@ -172,8 +176,10 @@ class PlayState extends MusicBeatState
 	public var bartype:String;
 
 	public  var dad:Character = null;
+	public  var dad2:Character = null;
 	public var gf:Character = null;
 	public var boyfriend:Boyfriend = null;
+	public var boyfriend2:Boyfriend = null;
 
 	public var notes:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
@@ -249,6 +255,8 @@ class PlayState extends MusicBeatState
 	public var iconGroup:FlxTypedGroup<HealthIcon>;
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
+	public var iconP3:HealthIcon;
+	public var iconP4:HealthIcon;
 	public var camHUD:FlxCamera;
 	public var camGame:FlxCamera;
 	public var camOther:FlxCamera;
@@ -537,6 +545,8 @@ class PlayState extends MusicBeatState
 
 				boyfriend: [770, 100],
 				girlfriend: [400, 130],
+				boyfriend2: [770, 100],
+				opponent2: [100, 100],
 				opponent: [100, 100],
 				hide_girlfriend: false,
 
@@ -553,10 +563,14 @@ class PlayState extends MusicBeatState
 		isPixelStage = stageData.isPixelStage;
 		BF_X = stageData.boyfriend[0];
 		BF_Y = stageData.boyfriend[1];
+		BF2_X = stageData.boyfriend2[0];
+		BF2_Y = stageData.boyfriend2[1];
 		GF_X = stageData.girlfriend[0];
 		GF_Y = stageData.girlfriend[1];
 		DAD_X = stageData.opponent[0];
 		DAD_Y = stageData.opponent[1];
+		DAD2_X = stageData.opponent2[0];
+		DAD2_Y = stageData.opponent2[1];
 
 		if(stageData.camera_speed != null)
 			cameraSpeed = stageData.camera_speed;
@@ -588,10 +602,10 @@ class PlayState extends MusicBeatState
 				stageFront.updateHitbox();
 				add(stageFront);
 				sheddar = new FlxRuntimeShader(Paths.getTextFromFile('shader/redTVStatic.frag', false));
-				testshadermec = true;
+				testshadermec = false;
 				
-				camOther.setFilters([new ShaderFilter(sheddar)]);
-				camOther.alpha =  0;
+				//camOther.setFilters([new ShaderFilter(sheddar)]);
+				camOther.alpha =  1;
 
 				warning = new FlxSprite(Paths.image('warn'));
 				warning.screenCenter();
@@ -1101,11 +1115,23 @@ class PlayState extends MusicBeatState
 		dad = new Character(0, 0, SONG.player2);
 		startCharacterPos(dad, true);
 		dadGroup.add(dad);
+		if (SONG.duo == true){
+			dad2 = new Character(dad.x -200, 0, SONG.player3);
+			dadGroup.add(dad2);
+			dad2.x =DAD2_X;
+			dad2.y =DAD2_Y;
+		}
 		startCharacterLua(dad.curCharacter);
 
 		boyfriend = new Boyfriend(0, 0, SONG.player1);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
+		if (SONG.duo == true){
+			boyfriend2 = new Boyfriend(boyfriend.x -200, 0, SONG.player4);
+			boyfriendGroup.add(boyfriend2);
+			boyfriend2.x =BF2_X;
+			boyfriend2.y =BF2_Y;
+		}
 		startCharacterLua(boyfriend.curCharacter);
 
 		var camPos:FlxPoint = new FlxPoint(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
@@ -1208,7 +1234,7 @@ class PlayState extends MusicBeatState
 		// add(strumLine);
 
 		
-		if (SONG.song != '' ) //VERRY SPECIFIC modchart turn offs
+		if (SONG.song != 'Patched-out' ) //VERRY SPECIFIC modchart turn offs
 		{
 			playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
 	
@@ -1278,6 +1304,21 @@ class PlayState extends MusicBeatState
 		iconGroup = new FlxTypedGroup<HealthIcon>();
 		iconGroup.add(iconP1);
 		iconGroup.add(iconP2);
+
+		if (SONG.duo ==true){
+			iconP3 = new HealthIcon(dad2.healthIcon, false);
+			iconP3.y = healthBar.y -30 ;
+			iconP3.cameras = [camHUD];
+			iconP3.x = iconP2.x - 100;
+			iconP3.visible = !ClientPrefs.hideHud;
+			iconP3.alpha = ClientPrefs.healthBarAlpha;
+			iconP4 = new HealthIcon(boyfriend2.healthIcon, true);
+			iconP4.y = healthBar.y -30 ;
+			iconP4.cameras = [camHUD];
+			iconP4.x = iconP1.x + 100;
+			iconP4.visible = !ClientPrefs.hideHud;
+			iconP4.alpha = ClientPrefs.healthBarAlpha;
+		}
 		add(iconGroup);
 
 		scoreTxt = new FlxText(0, healthBar.y + 36, FlxG.width, "", 20);
@@ -1512,7 +1553,7 @@ class PlayState extends MusicBeatState
 		}
 		callOnLuas('onCreatePost', []);
 
-		if (SONG.song != '' ){
+		if (SONG.song != 'Patched-out' ){
 			ModchartFuncs.loadLuaFunctions();
 		}
 		 //add this if you want lua functions in scripts
@@ -2246,7 +2287,7 @@ class PlayState extends MusicBeatState
 			generateStaticArrows(1);
 
 			 //add after generating strums
-			 if (SONG.song != '' ){
+			 if (SONG.song != 'Patched-out' ){
 				NoteMovement.getDefaultStrumPos(this);
 			 }
   			
@@ -2293,6 +2334,17 @@ class PlayState extends MusicBeatState
 				if (tmr.loopsLeft % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
 				{
 					dad.dance();
+				}
+				if (SONG.duo == true){
+					if (tmr.loopsLeft % dad2.danceEveryNumBeats == 0 && dad2.animation.curAnim != null && !dad2.animation.curAnim.name.startsWith('sing') && !dad2.stunned)
+						{
+							dad2.dance();
+						}
+
+					if (tmr.loopsLeft % boyfriend2.danceEveryNumBeats == 0 && boyfriend2.animation.curAnim != null && !boyfriend2.animation.curAnim.name.startsWith('sing') && !boyfriend2.stunned)
+						{
+							boyfriend2.dance();
+						}
 				}
 
 				var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
@@ -3414,6 +3466,8 @@ class PlayState extends MusicBeatState
 
 		iconP1.x = healthBar.barCenter + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
 		iconP2.x = healthBar.barCenter - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
+		iconP4.x = iconP1.x + 100;
+		iconP3.x = iconP2.x - 100;
 
 		
 
@@ -4947,6 +5001,13 @@ class PlayState extends MusicBeatState
 				boyfriend.dance();
 				//boyfriend.animation.curAnim.finish();
 			}
+			if(SONG.duo == true){
+				if (boyfriend2.animation.curAnim != null && boyfriend2.holdTimer > Conductor.stepCrochet * (0.0011 / FlxG.sound.music.pitch) * boyfriend2.singDuration && boyfriend2.animation.curAnim.name.startsWith('sing') && !boyfriend2.animation.curAnim.name.endsWith('miss'))
+					{
+						boyfriend2.dance();
+						//boyfriend.animation.curAnim.finish();
+					}
+			}
 		}
 
 		// TO DO: Find a better way to handle controller inputs, this should work for now
@@ -5099,10 +5160,7 @@ class PlayState extends MusicBeatState
 					char.holdTimer = 0;
 				}
 			}
-	
-			if (SONG.needsVoices)
-				vocals.volume = 1;
-
+	 
 			if (SONG.needsoppVoices)
 				oppvocals.volume = 1;
 	
@@ -5579,6 +5637,17 @@ class PlayState extends MusicBeatState
 		if (curBeat % dad.danceEveryNumBeats == 0 && dad.animation.curAnim != null && !dad.animation.curAnim.name.startsWith('sing') && !dad.stunned)
 		{
 			dad.dance();
+		}
+		if (SONG.duo == true){
+			if (curBeat % boyfriend2.danceEveryNumBeats == 0 && boyfriend2.animation.curAnim != null && !boyfriend2.animation.curAnim.name.startsWith('sing') && !boyfriend2.stunned)
+				{
+					boyfriend2.dance();
+				}
+
+			if (curBeat % dad2.danceEveryNumBeats == 0 && dad2.animation.curAnim != null && !dad2.animation.curAnim.name.startsWith('sing') && !dad2.stunned)
+				{
+					dad2.dance();
+				}
 		}
 
 		switch (curStage)

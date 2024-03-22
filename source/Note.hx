@@ -160,7 +160,15 @@ class Note extends FlxSprite
 					noMissAnimation = true;
 				case 'GF Sing':
 					gfNote = true;
-				case 'speed test':
+				case 'speed test fastest':
+					multSpeed = 6;
+
+				case 'speed test fast':
+					multSpeed = 4;
+				case 'speed test slow?':
+					multSpeed = 0.5;
+
+				case 'Second character':
 					
 				case 'woodhog test':
 					

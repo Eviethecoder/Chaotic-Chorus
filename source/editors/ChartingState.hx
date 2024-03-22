@@ -67,7 +67,9 @@ class ChartingState extends MusicBeatState
 		'',
 		'Alt Animation',
 		'Hey!',
-		'speed test',
+		'speed test fastest',
+		'speed test fast',
+		'speed test slow?',
 		'Hurt Note',
 		'woodhog test',
 		'GF Sing',
@@ -130,6 +132,11 @@ class ChartingState extends MusicBeatState
 	var bullshitUI:FlxGroup;
 
 	var highlight:FlxSprite;
+
+
+	
+	var duomode:FlxUICheckBox;
+
 
 	public static var GRID_SIZE:Int = 40;
 	var CAM_OFFSET:Int = 360;
@@ -231,10 +238,13 @@ class ChartingState extends MusicBeatState
 				bpm: 150.0,
 				needsVoices: true,
 				needsoppVoices: false,
+				duo: false,
 				arrowSkin: '',
 				splashSkin: 'noteSplashes',//idk it would crash if i didn't
 				player1: 'bf',
 				player2: 'dad',
+				player3: 'bf',
+				player4: 'dad',
 				gfVersion: 'gf',
 				speed: 1,
 				stage: 'stage',
@@ -362,6 +372,14 @@ class ChartingState extends MusicBeatState
 			lilStage.visible = lilBuddiesBox.checked;
 		};
 
+		duomode = new FlxUICheckBox(lilBuddiesBox.x + 200, lilBuddiesBox.y, null, null, "duo mode", 50);
+		duomode.checked = _song.duo;
+
+		duomode.callback = function()
+			{
+				_song.duo = duomode.checked;
+				//trace('CHECKED!');
+			};
 		quant = new AttachedSprite('chart_quant','chart_quant');
 		quant.animation.addByPrefix('q','chart_quant',0,false);
 		quant.animation.play('q', true, false, 0);
@@ -621,6 +639,25 @@ class ChartingState extends MusicBeatState
 		player2DropDown.selectedLabel = _song.player2;
 		blockPressWhileScrolling.push(player2DropDown);
 
+		var player3DropDown = new FlxUIDropDownMenuCustom(player2DropDown.x + 150, player2DropDown.y , FlxUIDropDownMenuCustom.makeStrIdLabelArray(characters, true), function(character:String)
+			{
+				_song.player3 = characters[Std.parseInt(character)];
+				updateHeads();
+			});
+			player3DropDown.selectedLabel = _song.player3;
+			blockPressWhileScrolling.push(player3DropDown);
+			player3DropDown.visible	= true;
+
+		var player4DropDown = new FlxUIDropDownMenuCustom(gfVersionDropDown.x + 150, gfVersionDropDown.y , FlxUIDropDownMenuCustom.makeStrIdLabelArray(characters, true), function(character:String)
+				{
+					_song.player4 = characters[Std.parseInt(character)];
+					updateHeads();
+				});
+				player4DropDown.selectedLabel = _song.player4;
+				blockPressWhileScrolling.push(player4DropDown);
+				player4DropDown.visible	= true;
+
+
 		#if MODS_ALLOWED
 		var directories:Array<String> = [Paths.mods('stages/'), Paths.mods(Paths.currentModDirectory + '/stages/'), Paths.getPreloadPath('stages/')];
 		for(mod in Paths.getGlobalMods())
@@ -702,14 +739,18 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(new FlxText(stepperBPM.x + 100, stepperBPM.y - 15, 0, 'Song Offset:'));
 		tab_group_song.add(new FlxText(stepperSpeed.x, stepperSpeed.y - 15, 0, 'Song Speed:'));
 		tab_group_song.add(new FlxText(player2DropDown.x, player2DropDown.y - 15, 0, 'Opponent:'));
+		tab_group_song.add(new FlxText(player3DropDown.x, player3DropDown.y - 15, 0, 'Opponent2:'));
 		tab_group_song.add(new FlxText(gfVersionDropDown.x, gfVersionDropDown.y - 15, 0, 'Girlfriend:'));
 		tab_group_song.add(new FlxText(player1DropDown.x, player1DropDown.y - 15, 0, 'Boyfriend:'));
+		tab_group_song.add(new FlxText(player4DropDown.x, player4DropDown.y - 15, 0, 'Boyfriend2:'));
 		tab_group_song.add(new FlxText(stageDropDown.x, stageDropDown.y - 15, 0, 'Stage:'));
 		tab_group_song.add(new FlxText(noteSkinInputText.x, noteSkinInputText.y - 15, 0, 'Note Texture:'));
 		tab_group_song.add(new FlxText(noteSplashesInputText.x, noteSplashesInputText.y - 15, 0, 'Note Splashes Texture:'));
 		tab_group_song.add(player2DropDown);
 		tab_group_song.add(gfVersionDropDown);
 		tab_group_song.add(player1DropDown);
+		tab_group_song.add(player3DropDown);
+		tab_group_song.add(player4DropDown);
 		tab_group_song.add(stageDropDown);
 
 		UI_box.addGroup(tab_group_song);
@@ -1439,6 +1480,8 @@ class ChartingState extends MusicBeatState
 		tab_group_chart.add(check_warnings);
 		tab_group_chart.add(playSoundBf);
 		tab_group_chart.add(playSoundDad);
+		tab_group_chart.add(lilBuddiesBox);
+		tab_group_chart.add(duomode);
 		UI_box.addGroup(tab_group_chart);
 	}
 
